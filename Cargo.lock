@@ -82,6 +82,7 @@ name = "aoc2023"
 version = "0.1.0"
 dependencies = [
  "aoc-main",
+ "rayon",
 ]
 
 [[package]]
