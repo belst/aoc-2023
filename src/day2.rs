@@ -14,8 +14,8 @@ pub fn generate(input: &str) -> Vec<Game> {
         let mut draws = vec![];
         for draw in game.split(';') {
             let mut d = Draw::default();
-            for cube in draw.split(",") {
-                let (amount, color) = cube.trim().split_once(" ").expect("A cube and a number");
+            for cube in draw.split(',') {
+                let (amount, color) = cube.trim().split_once(' ').expect("A cube and a number");
                 match color.trim() {
                     "red" => d.red = amount.trim().parse().expect("to parse a number"),
                     "blue" => d.blue = amount.trim().parse().expect("to parse a number"),
@@ -33,9 +33,9 @@ pub fn generate(input: &str) -> Vec<Game> {
     games
 }
 
-pub fn part1(input: &Vec<Game>) -> usize {
+pub fn part1(input: &[Game]) -> usize {
     input
-        .into_iter()
+        .iter()
         .enumerate()
         .filter(|(_, g)| {
             g.iter()
@@ -45,7 +45,7 @@ pub fn part1(input: &Vec<Game>) -> usize {
         .sum()
 }
 
-pub fn part2(input: &Vec<Game>) -> usize {
+pub fn part2(input: &[Game]) -> usize {
     input
         .iter()
         .map(|g| {

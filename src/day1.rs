@@ -2,11 +2,11 @@ pub fn part1(input: &str) -> u32 {
     input
         .lines()
         .map(|l| {
-            let mut digits = l.chars().filter(|c| c.is_digit(10));
+            let mut digits = l.chars().filter(|c| c.is_ascii_digit());
             let first = digits.next().expect("there to be at least 1 digit");
             let last = digits.next_back().unwrap_or(first);
 
-            return 10 * first.to_digit(10).unwrap() + last.to_digit(10).unwrap();
+            10 * first.to_digit(10).unwrap() + last.to_digit(10).unwrap()
         })
         .sum()
 }

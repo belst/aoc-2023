@@ -27,19 +27,19 @@ pub fn part1(input: &str) -> usize {
     let height = input.lines().count();
     let mut index = 0;
     while index < input.len() {
-        if !input.chars().nth(index).unwrap().is_digit(10) {
+        if !input.chars().nth(index).unwrap().is_ascii_digit() {
             index += 1;
             continue;
         }
         let num: String = input
             .chars()
             .skip(index)
-            .take_while(|c| c.is_digit(10))
+            .take_while(|c| c.is_ascii_digit())
             .collect();
         let idxs = surrounding(index, num.len(), width + 1, height);
         if idxs.iter().any(|i| {
             let c = input.chars().nth(*i).unwrap();
-            !c.is_digit(10) && c != '.' && c != '\n'
+            !c.is_ascii_digit() && c != '.' && c != '\n'
         }) {
             numbers.push(num.parse().unwrap());
         }
@@ -56,11 +56,11 @@ pub fn part2(input: &str) -> usize {
     let mut index = 0;
 
     while index < input.len() {
-        if input.chars().nth(index).unwrap().is_digit(10) {
+        if input.chars().nth(index).unwrap().is_ascii_digit() {
             let num: String = input
                 .chars()
                 .skip(index)
-                .take_while(|c| c.is_digit(10))
+                .take_while(|c| c.is_ascii_digit())
                 .collect();
             numbers.insert(index..(index + num.len()), num.parse::<usize>().unwrap());
             index += num.len();
