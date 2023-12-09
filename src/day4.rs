@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-
 type Deck = Vec<usize>;
 
 pub fn generate(input: &str) -> Deck {
@@ -9,36 +8,44 @@ pub fn generate(input: &str) -> Deck {
         let (_, numbers) = l.split_once(':').unwrap();
         let (my, winning) = numbers.trim().split_once(" | ").unwrap();
         let my: HashSet<usize> = my.split_whitespace().flat_map(|n| n.parse().ok()).collect();
-        let winning = winning.split_whitespace().flat_map(|n| n.parse().ok()).collect();
+        let winning = winning
+            .split_whitespace()
+            .flat_map(|n| n.parse().ok())
+            .collect();
         v.push(my.intersection(&winning).count());
     }
     v
 }
 
 pub fn part1(input: &Deck) -> usize {
-    input.iter().map(|&matching| {
-        if matching > 0 {
-            1 << (matching - 1)
-        } else {
-            0
-        }
-    }).sum()
+    input
+        .iter()
+        .map(
+            |&matching| {
+                if matching > 0 {
+                    1 << (matching - 1)
+                } else {
+                    0
+                }
+            },
+        )
+        .sum()
 }
 
 fn process(input: &Deck, current: usize) -> usize {
     let matching = input[current];
-    
+
     if 0 == matching {
         1
     } else {
-        1 + (current..(current + matching)).map(|i| process(input, i + 1)).sum::<usize>()
+        1 + (current..(current + matching))
+            .map(|i| process(input, i + 1))
+            .sum::<usize>()
     }
-
 }
 pub fn part2(input: &Deck) -> usize {
     (0..input.len()).map(|i| process(input, i)).sum()
 }
-
 
 #[cfg(test)]
 mod test {
@@ -66,5 +73,4 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11";
 
         assert_eq!(30, part2(&generate(input)))
     }
-
 }

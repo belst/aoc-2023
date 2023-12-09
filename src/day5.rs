@@ -46,16 +46,13 @@ pub fn part1(input: &Almanac) -> usize {
         .unwrap()
 }
 
-
 struct RangeSet {
     inner: Vec<Range<usize>>,
 }
 
 impl RangeSet {
     fn new() -> Self {
-        Self {
-            inner: vec![]
-        }
+        Self { inner: vec![] }
     }
 
     fn insert(&mut self, item: Range<usize>) {
@@ -65,15 +62,29 @@ impl RangeSet {
                 overlapping.push(i);
             }
         }
-        let min = item.start.min(overlapping.iter().map(|&i| self.inner[i].start).min().unwrap_or(item.start));
-        let max = item.end.max(overlapping.iter().map(|&i| self.inner[i].end).min().unwrap_or(item.end));
+        let min = item.start.min(
+            overlapping
+                .iter()
+                .map(|&i| self.inner[i].start)
+                .min()
+                .unwrap_or(item.start),
+        );
+        let max = item.end.max(
+            overlapping
+                .iter()
+                .map(|&i| self.inner[i].end)
+                .min()
+                .unwrap_or(item.end),
+        );
 
-        overlapping.iter().for_each(|&i| {self.inner.swap_remove(i);});
+        overlapping.iter().for_each(|&i| {
+            self.inner.swap_remove(i);
+        });
 
         self.inner.push(min..max);
     }
 
-    fn iter_values(&self) -> impl ParallelIterator<Item=usize> + '_ {
+    fn iter_values(&self) -> impl ParallelIterator<Item = usize> + '_ {
         self.inner.par_iter().flat_map(|r| r.clone())
     }
 }
@@ -88,13 +99,16 @@ impl FromIterator<Range<usize>> for RangeSet {
     }
 }
 
-
 pub fn part2(input: &Almanac) -> usize {
-    let ranges:RangeSet = input.seeds.chunks_exact(2)
+    let ranges: RangeSet = input
+        .seeds
+        .chunks_exact(2)
         .map(|s| (s[0]..s[0] + s[1]))
         .collect();
 
-    ranges.iter_values().filter_map(|s| {
+    ranges
+        .iter_values()
+        .filter_map(|s| {
             let mut next = Some(&input.maps);
             let mut current = s;
             loop {

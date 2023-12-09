@@ -28,7 +28,8 @@ pub fn generate(input: &str) -> Vec<Race> {
 // t * max_t - t * t > d
 // max_t -t > d / t
 pub fn part1(input: &[Race]) -> usize {
-    input.iter()
+    input
+        .iter()
         .map(|r| {
             for n in 0..r.time / 2 {
                 if n * (r.time - n) > r.distance {
@@ -36,18 +37,21 @@ pub fn part1(input: &[Race]) -> usize {
                 }
             }
             1
-        }).product()
+        })
+        .product()
 }
 
 pub fn part2(input: &[Race]) -> usize {
-    let (t, d) = input.iter().fold((String::new(), String::new()), |(mut t, mut d), r| {
-        t += &r.time.to_string();
-        d += &r.distance.to_string();
-        (t, d)
-    });
+    let (t, d) = input
+        .iter()
+        .fold((String::new(), String::new()), |(mut t, mut d), r| {
+            t += &r.time.to_string();
+            d += &r.distance.to_string();
+            (t, d)
+        });
     part1(&[Race {
         time: t.parse().unwrap(),
-        distance: d.parse().unwrap()
+        distance: d.parse().unwrap(),
     }])
 }
 

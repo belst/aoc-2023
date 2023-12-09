@@ -105,7 +105,6 @@ pub fn part1(input: &[(Hand, usize)]) -> usize {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct P2Card(Card);
 
-
 impl Ord for P2Card {
     fn cmp(&self, other: &Self) -> Ordering {
         if self.0 == other.0 {
