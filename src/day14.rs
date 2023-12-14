@@ -92,19 +92,18 @@ impl IndexMut<(usize, usize)> for Grid {
 }
 
 impl Grid {
-    fn tilt_vertical(&self, direction: Direction) -> Grid {
+    fn tilt_vertical(mut self, direction: Direction) -> Grid {
         assert!(matches!(direction, Direction::North | Direction::South));
-        let mut new = self.clone();
         if direction == Direction::North {
             let mut last_pos = vec![0; self.width];
             for y in 0..self.height {
                 for x in 0..self.width {
-                    match new[(x, y)] {
+                    match self[(x, y)] {
                         Rock::Cube => last_pos[x] = y + 1,
                         Rock::Rounded => {
                             if y != last_pos[x] {
-                                new[(x, last_pos[x])] = Rock::Rounded;
-                                new[(x, y)] = Rock::None;
+                                self[(x, last_pos[x])] = Rock::Rounded;
+                                self[(x, y)] = Rock::None;
                             }
                             last_pos[x] += 1;
                         }
@@ -116,12 +115,12 @@ impl Grid {
             let mut last_pos = vec![self.height - 1; self.width];
             for y in (0..self.height).rev() {
                 for x in 0..self.width {
-                    match new[(x, y)] {
+                    match self[(x, y)] {
                         Rock::Cube => last_pos[x] = y.saturating_sub(1),
                         Rock::Rounded => {
                             if y != last_pos[x] {
-                                new[(x, last_pos[x])] = Rock::Rounded;
-                                new[(x, y)] = Rock::None;
+                                self[(x, last_pos[x])] = Rock::Rounded;
+                                self[(x, y)] = Rock::None;
                             }
                             last_pos[x] -= 1;
                         }
@@ -130,21 +129,20 @@ impl Grid {
                 }
             }
         }
-        new
+        self
     }
-    fn tilt_horizontal(&self, direction: Direction) -> Grid {
+    fn tilt_horizontal(mut self, direction: Direction) -> Grid {
         assert!(matches!(direction, Direction::West | Direction::East));
-        let mut new = self.clone();
         if direction == Direction::West {
             let mut last_pos = vec![0; self.height];
             for x in 0..self.width {
                 for y in 0..self.height {
-                    match new[(x, y)] {
+                    match self[(x, y)] {
                         Rock::Cube => last_pos[y] = x + 1,
                         Rock::Rounded => {
                             if x != last_pos[y] {
-                                new[(last_pos[y], y)] = Rock::Rounded;
-                                new[(x, y)] = Rock::None;
+                                self[(last_pos[y], y)] = Rock::Rounded;
+                                self[(x, y)] = Rock::None;
                             }
                             last_pos[y] += 1;
                         }
@@ -156,12 +154,12 @@ impl Grid {
             let mut last_pos = vec![self.width - 1; self.height];
             for x in (0..self.width).rev() {
                 for y in 0..self.height {
-                    match new[(x, y)] {
+                    match self[(x, y)] {
                         Rock::Cube => last_pos[y] = x.saturating_sub(1),
                         Rock::Rounded => {
                             if x != last_pos[y] {
-                                new[(last_pos[y], y)] = Rock::Rounded;
-                                new[(x, y)] = Rock::None;
+                                self[(last_pos[y], y)] = Rock::Rounded;
+                                self[(x, y)] = Rock::None;
                             }
                             last_pos[y] -= 1;
                         }
@@ -170,9 +168,9 @@ impl Grid {
                 }
             }
         }
-        new
+        self
     }
-    fn tilt(&self, direction: Direction) -> Grid {
+    fn tilt(self, direction: Direction) -> Grid {
         match direction {
             Direction::North | Direction::South => self.tilt_vertical(direction),
             _ => self.tilt_horizontal(direction),
@@ -205,7 +203,7 @@ impl Grid {
 
 pub fn part2(input: &str) -> usize {
     let mut seen = HashMap::new();
-    let mut index_map = HashMap::new();
+    let mut index_map = Vec::new();
     let mut index = 0usize;
     let mut grid: Grid = input.parse().unwrap();
     let iterations = 1000000000;
@@ -216,11 +214,11 @@ pub fn part2(input: &str) -> usize {
                 break;
             }
             let offset = iterations - i;
-            grid = index_map.remove(&(i + offset % diff)).unwrap();
+            grid = index_map.swap_remove(i + offset % diff);
             break;
         }
         seen.insert(grid.clone(), index);
-        index_map.insert(index, grid.clone());
+        index_map.push(grid.clone());
         grid = grid.cycle();
         index += 1;
     }
