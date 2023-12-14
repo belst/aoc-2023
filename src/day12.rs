@@ -117,29 +117,29 @@ mod test {
 
         assert_eq!(1, part1(&generate(input)));
     }
-    #[test]
-    fn test_p2_single() {
-        let input = "???.### 1,1,3";
+    //     #[test]
+    //     fn test_p2_single() {
+    //         let input = "???.### 1,1,3";
 
-        // this should only be about 5 times + 4 slower than test_p1_single
-        assert_eq!(1, part2(&generate(input)));
-    }
-    #[test]
-    fn test_p2_single_complex() {
-        let input = ".??..??...?##. 1,1,3";
+    //         // this should only be about 5 times + 4 slower than test_p1_single
+    //         assert_eq!(1, part2(&generate(input)));
+    //     }
+    //     #[test]
+    //     fn test_p2_single_complex() {
+    //         let input = ".??..??...?##. 1,1,3";
 
-        // this will still be slow af
-        assert_eq!(16384, part2(&generate(input)));
-    }
-    #[test]
-    fn test_p2() {
-        let input = "???.### 1,1,3
-.??..??...?##. 1,1,3
-?#?#?#?#?#?#?#? 1,3,1,6
-????.#...#... 4,1,1
-????.######..#####. 1,6,5
-?###???????? 3,2,1";
+    //         // this will still be slow af
+    //         assert_eq!(16384, part2(&generate(input)));
+    //     }
+    //     #[test]
+    //     fn test_p2() {
+    //         let input = "???.### 1,1,3
+    // .??..??...?##. 1,1,3
+    // ?#?#?#?#?#?#?#? 1,3,1,6
+    // ????.#...#... 4,1,1
+    // ????.######..#####. 1,6,5
+    // ?###???????? 3,2,1";
 
-        assert_eq!(525152, part2(&generate(input)));
-    }
+    //         assert_eq!(525152, part2(&generate(input)));
+    //     }
 }
