@@ -11,7 +11,7 @@ struct Matrix<T> {
 
 impl<T> Matrix<T> {
     fn size(d: usize) -> usize {
-        ((d + 1) as f64 * (d as f64 / 2.0)) as usize
+        (d + 1) * d / 2
     }
 }
 impl<T: Default + Clone> Matrix<T> {
